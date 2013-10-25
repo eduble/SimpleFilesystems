@@ -9,10 +9,14 @@ TaggerFS allows you:
 
 """
 
-import os, sys, tempfile, fuse
-from sys import argv
+from sys import argv, exit, path as sys_path
+from os.path import basename, dirname, join as path_join
+
+top_dir = path_join(dirname(__file__), '..')
+sys.path.append(path_join(top_dir, 'common'))
+
+import filestat, fuse
 from errno import *
-from os.path import basename
 from id3library import ID3Library
 from fuse import Fuse
 
@@ -32,22 +36,8 @@ class TaggerFS(Fuse):
 		Subroutine which prepares a sample 'stat' structure 
 		(as returned by os.stat) for a directory and for a symlink.
 		"""
-		# This filesystem only manages 2 kinds of files: 
-		# directories and symlinks. 
-		# We consider that all the directories will have
-		# the same attributes, so we create a temporary
-		# directory and record its stat structure. 
-		# Same for the symlinks.
-		# 1 - create a temp dir and a temp symlink
-		tmpdir = tempfile.mkdtemp()
-		tmplink = tmpdir + '/link'
-		os.symlink(tmpdir, tmplink)
-		# 2 - retrieve their attributes
-		self.sample_dir_stat = os.lstat(tmpdir)	
-		self.sample_link_stat = os.lstat(tmplink)	
-		# 3 - clean up
-		os.remove(tmplink)
-		os.rmdir(tmpdir)
+		self.sample_dir_stat = filestat.generateSampleDirStat()
+		self.sample_link_stat = filestat.generateSampleSymlinkStat()
 	
 	def analysePath(self, path):
 		"""
@@ -158,12 +148,12 @@ if __name__ == '__main__':
 	usage = "TaggerFS: view and manage your mp3 collection as an ID3-based tree.\n" + \
 		argv[0] + " <base_mp3_dir> <mount_point>"
 	
-	if len(sys.argv) < 3:
+	if len(argv) < 3:
 		print usage
-		sys.exit()
+		exit()
 	
-	library_dir = sys.argv[1]
-	mount_point = sys.argv[2]
+	library_dir = argv[1]
+	mount_point = argv[2]
 	
 	library = ID3Library()
 	library.registerMP3FilesFromDir(library_dir)

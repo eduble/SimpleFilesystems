@@ -5,8 +5,13 @@ an article published in GNU/Linux magazine.
 I doubt it could ever be useful for anything else. :)
 """
 
-import os, tempfile, fuse, math, stat
-from sys import argv, exit
+from sys import argv, exit, path as sys_path
+from os.path import dirname, join as path_join
+
+top_dir = path_join(dirname(__file__), '..')
+sys_path.append(path_join(top_dir, 'common'))
+
+import filestat, tempfile, fuse, math, stat
 from errno import *
 from fuse import Fuse
 
@@ -39,35 +44,18 @@ class CharpenteFS(Fuse):
 		self.initSampleStatStructures()
 		self.stock_engine = StockEngine()
 	
-	def generateSampleDirStat(self):
-		tmpdir = tempfile.mkdtemp()
-		stat_info = os.stat(tmpdir)
-		os.rmdir(tmpdir)
-		return stat_info
-		
-	def generateSampleFileStat(self, mode, size):
-		fd, tmpfile = tempfile.mkstemp()
-		if size > 0:
-			os.write(fd, '-' * size);
-		os.close(fd)
-		os.chmod(tmpfile, mode)
-		stat_info = os.stat(tmpfile)
-		print stat_info
-		os.remove(tmpfile)
-		return stat_info
-		
 	def initSampleStatStructures(self):
 		"""
 		Subroutine which prepares a sample 'stat' structure 
 		(as returned by os.stat) for a readable file,
 		a writable file and a directory.
 		"""
-		self.sample_dir_stat = self.generateSampleDirStat()
-		self.sample_wr_only_stat = self.generateSampleFileStat(
+		self.sample_dir_stat = filestat.generateSampleDirStat()
+		self.sample_wr_only_stat = filestat.generateSampleFileStat(
 			stat.S_IWUSR | stat.S_IWGRP, # write-only
 			0
 		)
-		self.sample_rd_only_stat = self.generateSampleFileStat(
+		self.sample_rd_only_stat = filestat.generateSampleFileStat(
 			stat.S_IRUSR | stat.S_IRGRP, # read-only
 			READ_SIZE
 		)
