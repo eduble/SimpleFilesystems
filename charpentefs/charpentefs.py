@@ -52,11 +52,11 @@ class CharpenteFS(Fuse):
 		"""
 		self.sample_dir_stat = filestat.generateSampleDirStat()
 		self.sample_wr_only_stat = filestat.generateSampleFileStat(
-			stat.S_IWUSR | stat.S_IWGRP, # write-only
+			stat.S_IWUSR, # write-only
 			0
 		)
 		self.sample_rd_only_stat = filestat.generateSampleFileStat(
-			stat.S_IRUSR | stat.S_IRGRP, # read-only
+			stat.S_IRUSR, # read-only
 			READ_SIZE
 		)
 	
