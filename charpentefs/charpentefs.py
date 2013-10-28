@@ -115,7 +115,6 @@ class CharpenteFS(Fuse):
 			return -EINVAL
 	
 	def write(self, path, buf, offset):
-		print path, buf, offset
 		return self.pose_renfort_input(buf)
 	
 	def utime(self, path, times):
