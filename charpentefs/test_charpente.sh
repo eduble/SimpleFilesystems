@@ -1,6 +1,7 @@
 #!/bin/bash
 
 PRECISION=5
+MOUNTPOINT=$1
 
 generate_float()
 {
@@ -16,8 +17,6 @@ while [ $(cat mp/stock) -gt 0 ]
 do
 	x=$(generate_float)  
 	y=$(generate_float)  
-	echo "$x $y" > mp/pose_renfort
+	echo "$x $y" > $MOUNTPOINT/pose_renfort
 done
-
-cat mp/pieces_ok
 
