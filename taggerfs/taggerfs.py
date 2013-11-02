@@ -162,5 +162,7 @@ if __name__ == '__main__':
 	server.fuse_args.mountpoint = mount_point
 	server.multithreaded = False
 	server.fuse_args.setmod('foreground')
+	server.fuse_args.add('default_permissions')
+	server.fuse_args.add('debug')
 	server.main()
 
