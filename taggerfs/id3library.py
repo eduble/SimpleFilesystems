@@ -13,6 +13,13 @@ class ID3Library:
 		"""Constructor."""
 		self._data = {}
 	
+	def getTag(self, mp3file):
+		try:
+                        tag = EasyID3(mp3file)
+                except:	# no ID3 tag
+                        tag = EasyID3()
+		return tag
+		
 	def getTagElement(self, tag, elem):
 		"""Sub-routine to get one element of an ID3 tag (i.e. artist, album, ...)."""
 		value = None
@@ -24,7 +31,7 @@ class ID3Library:
 	
 	def registerMP3File(self, path):
 		"""Registers the ID3 tag of a given mp3 file into the library."""
-		tag = EasyID3(path)
+		tag = self.getTag(path)
 		artist = self.getTagElement(tag,'artist')
 		album = self.getTagElement(tag,'album')
 		if artist == None:
@@ -78,9 +85,9 @@ class ID3Library:
 		self._data[new_artist][new_album].add(fullpath)
 		self._data[old_artist][old_album].remove(fullpath)
 		# update ID3 tag
-		tag = EasyID3(fullpath)
+		tag = self.getTag(fullpath)
 		tag['artist'] = new_artist
 		tag['album'] = new_album
-		tag.save()
+		tag.save(fullpath)
 	
 
