@@ -10,7 +10,7 @@ TaggerFS allows you:
 """
 
 from sys import argv, exit, path as sys_path
-from os.path import basename, dirname, join as path_join
+from os.path import basename, dirname, abspath, join as path_join
 
 top_dir = path_join(dirname(__file__), '..')
 sys.path.append(path_join(top_dir, 'common'))
@@ -152,7 +152,7 @@ if __name__ == '__main__':
 		print usage
 		exit()
 	
-	library_dir = argv[1]
+	library_dir = abspath(argv[1])
 	mount_point = argv[2]
 	
 	library = ID3Library()
