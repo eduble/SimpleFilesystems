@@ -35,3 +35,4 @@ def generateSampleSymlinkStat():
 	stat_info = os.lstat(tmplink)	
 	os.remove(tmplink)
 	os.rmdir(tmpdir)
+	return stat_info
