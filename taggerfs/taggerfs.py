@@ -13,7 +13,7 @@ from sys import argv, exit, path as sys_path
 from os.path import basename, dirname, abspath, join as path_join
 
 top_dir = path_join(dirname(__file__), '..')
-sys.path.append(path_join(top_dir, 'common'))
+sys_path.append(path_join(top_dir, 'common'))
 
 import filestat, fuse
 from errno import *
