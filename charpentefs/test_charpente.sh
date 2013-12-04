@@ -13,7 +13,7 @@ generate_float()
 	echo
 }
 
-while [ $(cat mp/stock) -gt 0 ]
+while [ $(cat $MOUNTPOINT/stock) -gt 0 ]
 do
 	x=$(generate_float)  
 	y=$(generate_float)  
